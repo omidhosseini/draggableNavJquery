@@ -18,7 +18,7 @@
             tabSize: 20,
             disableNesting: 'ui-nestedSortable-no-nesting',
             errorClass: 'ui-nestedSortable-error',
-            listType: 'ul',
+            listType: 'ol',
             maxLevels: 0,
             noJumpFix: 0
         },
@@ -110,7 +110,7 @@
                         break;
                     }
 
-                    // Clear emtpy ul's/ol's
+                    // Clear emtpy ol's/ol's
                     this._clearEmpty(itemElement);
 
                     this._trigger("change", event, this._uiHash());
@@ -290,7 +290,7 @@
 
             $.ui.sortable.prototype._clear.apply(this, arguments);
 
-            // Clean last empty ul/ol
+            // Clean last empty ol/ol
             for (var i = this.items.length - 1; i >= 0; i--) {
                 var item = this.items[i].item[0];
                 this._clearEmpty(item);

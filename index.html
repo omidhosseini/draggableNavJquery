@@ -98,7 +98,7 @@
         
         p,
         ol,
-        ul,
+        ol,
         pre,
         form {
             margin-top: 0;
@@ -131,60 +131,63 @@
 
 <body>
 
-    <ul class="sortable">
-        <li id="list_1">
+    <ol class="sortable">
+        <li id="list_1001">
             <div>Item 1</div>
         </li>
-        <li id="list_2">
+        <li id="list_1002">
             <div>Item 2</div>
-            <ul>
-                <li id="list_3">
+            <ol>
+                <li id="list_1003">
                     <div>Sub Item 2.1</div>
                 </li>
-                <li id="list_4">
+                <li id="list_1004">
                     <div>Sub Item 2.2</div>
                 </li>
-                <li id="list_5">
+                <li id="list_1005">
                     <div>Sub Item 2.3</div>
                 </li>
-                <li id="list_6">
+                <li id="list_1006">
                     <div>Sub Item 2.4</div>
                 </li>
-            </ul>
+            </ol>
         </li>
-        <li id="list_7" class="no-nest">
+        <li id="list_1007" class="no-nest">
             <div>Item 3 (no-nesting)</div>
         </li>
-        <li id="list_8" class="no-nest">
+        <li id="list_1008" class="no-nest">
             <div>Item 4 (no-nesting)</div>
         </li>
-        <li id="list_9">
+        <li id="list_1009">
             <div>Item 5</div>
         </li>
-        <li id="list_10">
+        <li id="list_10010">
             <div>Item 6</div>
-            <ul>
-                <li id="list_11">
+            <ol>
+                <li id="list_10011">
                     <div>Sub Item 6.1</div>
                 </li>
-                <li id="list_12" class="no-nest">
+                <li id="list_10012" class="no-nest">
                     <div>Sub Item 6.2 (no-nesting)</div>
                 </li>
-                <li id="list_13">
+                <li id="list_10013">
                     <div>Sub Item 6.3</div>
                 </li>
-                <li id="list_14">
+                <li id="list_10014">
                     <div>Sub Item 6.4</div>
                 </li>
-            </ul>
+            </ol>
         </li>
-        <li id="list_15">
+        <li id="list_10015">
             <div>Item 7</div>
         </li>
-        <li id="list_16">
+        <li id="list_10016">
             <div>Item 8</div>
         </li>
-    </ul>
+    </ol>
+
+    <input type="submit" name="toArray" id="toArray" value="To array" />
+    <pre id="toArrayOutput"></pre>
 
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -193,7 +196,7 @@
     <script>
         $(document).ready(function() {
 
-            $('ul.sortable').nestedSortable({
+            $('ol.sortable').nestedSortable({
                 disableNesting: 'no-nest',
                 forcePlaceholderSize: true,
                 handle: 'div',
@@ -207,7 +210,44 @@
                 tolerance: 'pointer',
                 toleranceElement: '> div'
             });
+
+            let a = $('li>div').index;
+            console.log("Index:", a);
         });
+
+        $('#toArray').click(function(e) {
+            arraied = $('ol.sortable').nestedSortable('toArray', {
+                startDepthCount: 0
+            });
+            arraied = dump(arraied);
+            (typeof($('#toArrayOutput')[0].textContent) != 'undefined') ?
+            $('#toArrayOutput')[0].textContent = arraied: $('#toArrayOutput')[0].innerText = arraied;
+        })
+
+        function dump(arr, level) {
+            var dumped_text = "";
+            if (!level) level = 0;
+
+            //The padding given at the beginning of the line.
+            var level_padding = "";
+            for (var j = 0; j < level + 1; j++) level_padding += "    ";
+
+            if (typeof(arr) == 'object') { //Array/Hashes/Objects
+                for (var item in arr) {
+                    var value = arr[item];
+
+                    if (typeof(value) == 'object') { //If it is an array,
+                        dumped_text += level_padding + "'" + item + "' ...\n";
+                        dumped_text += dump(value, level + 1);
+                    } else {
+                        dumped_text += level_padding + "'" + item + "' => \"" + value + "\"\n";
+                    }
+                }
+            } else { //Strings/Chars/Numbers etc.
+                dumped_text = "===>" + arr + "<===(" + typeof(arr) + ")";
+            }
+            return dumped_text;
+        }
     </script>
 
 </body>
